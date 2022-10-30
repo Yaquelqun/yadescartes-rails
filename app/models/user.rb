@@ -4,4 +4,8 @@ class User < ApplicationRecord
 
   has_many :past_participations, -> { inactive }, class_name: 'Participation', dependent: :destroy
   has_many :past_lobbies, through: :past_participations, class_name: 'Lobby', source: :lobby
+
+  def busy?
+    participation.present?
+  end
 end

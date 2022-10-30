@@ -4,7 +4,7 @@ describe CreateLobby do
   describe 'call' do
     subject(:service_response) do
       described_class.new(**service_arguments).call
-    rescue ApplicationError => exception
+    rescue Errors::ApplicationError => exception
       exception
     end
 
@@ -22,7 +22,7 @@ describe CreateLobby do
       end
 
       it 'adds the user as a participant in the lobby' do
-        expect(service_response.users.id).to eql [user.id]
+        expect(service_response.users.ids).to eql [user.id]
       end
     end
 
@@ -30,11 +30,7 @@ describe CreateLobby do
       let(:service_arguments) { { user_id: nil } }
 
       it 'raises an error' do
-        expect(service_response.class).to eql(ApplicationError)
-      end
-
-      it 'does not create a lobby' do
-        expect { service_response }.not_to change(Lobby, :count)
+        expect { service_response }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
@@ -42,9 +38,13 @@ describe CreateLobby do
       let(:lobby) { create(:lobby, users: [user]) }
       let(:service_arguments) { { user_id: user.id } }
 
+      before do
+        lobby
+      end
+
       it 'raises an application error' do
-        expect(service_response.class).to eql(ApplicationError)
-        expect(service_response.messages).to eql('user_already_in_lobby')
+        expect(service_response.class).to eql(Errors::ApplicationError)
+        expect(service_response.message).to eql('user_already_in_lobby')
       end
 
       it 'does not create a lobby' do
