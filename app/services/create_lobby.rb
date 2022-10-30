@@ -1,7 +1,7 @@
 class CreateLobby
   attr_reader :user_id
 
-  def initialize(user_id:)
+  def initialize(user_id: nil)
     @user_id = user_id
   end
 
@@ -16,7 +16,7 @@ class CreateLobby
   private
 
   def check_user_availability
-    return unless user.busy?
+    return unless user_id && user.busy?
 
     raise Errors::ApplicationError.new(status: :unprocessable_entity, message: 'user_already_in_lobby')
   end
@@ -26,6 +26,8 @@ class CreateLobby
   end
 
   def add_user_to(lobby)
+    return unless user_id
+
     lobby.users << user
   end
 

@@ -29,8 +29,9 @@ describe CreateLobby do
     context 'without arguments' do
       let(:service_arguments) { { user_id: nil } }
 
-      it 'raises an error' do
-        expect { service_response }.to raise_error ActiveRecord::RecordNotFound
+      it 'creates an empty lobby' do
+        expect(service_response.class).to eql(Lobby)
+        expect(service_response.users).to be_empty
       end
     end
 
