@@ -30,7 +30,12 @@ describe FindLobby do
         end
 
         context 'when the lobby is now full' do
-          it 'updates the lobby status'
+          let(:users) { create_list(:user, 3) }
+
+          it 'updates the lobby status' do
+            service_response
+            expect(lobby.reload.status).to eql(Lobby::ONGOING)
+          end
         end
       end
 
