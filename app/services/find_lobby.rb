@@ -6,11 +6,18 @@ class FindLobby
   end
 
   def call
+    check_user_availability
     available_lobby.users << user
     available_lobby
   end
 
   private
+
+  def check_user_availability
+    return unless user.busy?
+
+    raise Errors::ApplicationError.new(status: :unprocessable_entity, message: 'user_already_in_lobby')
+  end
 
   def available_lobby
     @available_lobby ||= Lobby.waiting_for_players.order(created_at: :asc).first || CreateLobby.new.call

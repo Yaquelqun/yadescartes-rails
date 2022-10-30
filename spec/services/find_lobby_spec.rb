@@ -58,12 +58,27 @@ describe FindLobby do
     end
 
     context 'without argument' do
-      it 'raises an error'
+      let(:service_arguments) { { user_id: nil } }
+
+      it 'raises an error' do
+        expect { service_response }.to raise_error ActiveRecord::RecordNotFound
+      end
     end
 
     context 'with a busy user' do
-      it 'raises an error'
-      it 'does not create a new participation'
+      let(:lobby) { create(:lobby, users: [user]) }
+      
+      before do
+        lobby
+      end
+
+      it 'raises an error' do
+        expect(service_response.class).to eql Errors::ApplicationError
+      end
+
+      it 'does not create a new participation' do
+        expect { service_response }.to change(Participation, :count).by(0)
+      end
     end
   end
 end
