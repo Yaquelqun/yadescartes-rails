@@ -4,3 +4,4 @@ module Types
     connection_type_class(Types::BaseConnection)
   end
 end
+

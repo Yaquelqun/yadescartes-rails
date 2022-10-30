@@ -17,3 +17,4 @@ module Rescueable
     end
   end
 end
+

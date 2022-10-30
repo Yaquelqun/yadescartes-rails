@@ -9,3 +9,4 @@ class User < ApplicationRecord
     participation.present?
   end
 end
+

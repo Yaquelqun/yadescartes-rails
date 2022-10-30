@@ -19,3 +19,4 @@ class Lobby < ApplicationRecord
     update(status: ONGOING) if participations.count == MAX_PLAYERS
   end
 end
+

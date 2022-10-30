@@ -3,3 +3,4 @@ FactoryBot.define do
     status { ::Lobby::STATUSES.sample }
   end
 end
+

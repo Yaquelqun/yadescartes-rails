@@ -5,3 +5,4 @@ module Types
     include GraphQL::Types::Relay::NodeBehaviors
   end
 end
+

@@ -11,3 +11,4 @@ class Participation < ApplicationRecord
     lobby.check_for_start
   end
 end
+

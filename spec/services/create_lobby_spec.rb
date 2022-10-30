@@ -11,7 +11,7 @@ describe CreateLobby do
     let(:user) { create(:user) }
 
     context 'when given a free user' do
-      let(:service_arguments) { { user_id: user.id} }
+      let(:service_arguments) { { user_id: user.id } }
 
       it 'does not raise an error' do
         expect { described_class.new(**service_arguments).call }.not_to raise_error
@@ -54,3 +54,4 @@ describe CreateLobby do
     end
   end
 end
+
