@@ -2,10 +2,32 @@ require 'rails_helper'
 
 describe FindLobby do
   describe 'call' do
+    subject(:service_response) do
+      described_class.new(**service_arguments).call
+    rescue Errors::ApplicationError => exception
+      exception
+    end
+
+    let(:user) { create(:user) }
+    let(:service_arguments) { { user_id: user.id } }
+
     context 'with a free user' do
       context 'when a free lobby exists' do
-        it 'adds the user to the lobby'
-        it 'returns the joined lobby'
+        let(:lobby) { create(:lobby, status: Lobby::WAITING_FOR_PLAYERS) }
+        let(:users) { create_list(:user, 2) }
+
+        before do
+          lobby.users << users
+        end
+
+        it 'adds the user to the lobby' do
+          service_response
+          expect(lobby.users.ids).to include(user.id)
+        end
+
+        it 'returns the joined lobby' do
+          expect(service_response.id).to eql lobby.id
+        end
 
         context 'when the lobby is now full' do
           it 'updates the lobby status'
