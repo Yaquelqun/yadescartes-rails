@@ -40,8 +40,20 @@ describe FindLobby do
       end
 
       context 'when no free lobby is available' do
-        it 'creates a new lobby'
-        it 'returns the newly created lobby'
+        let(:lobbies) { create_list(:lobby, 5, status: Lobby::FINISHED) }
+
+        before do
+          lobbies
+        end
+
+        it 'creates a new lobby' do
+          expect { service_response }.to change(Lobby, :count).by(1)
+          expect(lobbies.pluck(:id)).not_to include(user.reload.lobby.id)
+        end
+
+        it 'returns the newly created lobby' do
+          expect(service_response.id).to eql(user.reload.lobby.id)
+        end
       end
     end
 
