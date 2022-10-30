@@ -1,6 +1,7 @@
 class Lobby < ApplicationRecord
   has_many :participations, dependent: :destroy
   has_many :users, through: :participations
+  has_one :pile
 
   WAITING_FOR_PLAYERS = 'waiting_for_players'.freeze
   ONGOING = 'ongoing'.freeze
