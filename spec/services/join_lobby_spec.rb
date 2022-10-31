@@ -13,6 +13,7 @@ describe JoinLobby do
 
     let(:service_arguments) { { user: user } }
 
+    # TODO: Put in contexts (mocked lobby behaviours for example)
     let(:find_lobby_double) { instance_double(FindLobby) }
     let(:find_lobby_behaviour) { receive(:call).and_return nil }
 
@@ -86,6 +87,35 @@ describe JoinLobby do
         expect(find_lobby_double).not_to have_received(:call)
         expect(create_lobby_double).not_to have_received(:call)
         expect(add_user_to_lobby_double).not_to have_received(:call)
+      end
+    end
+
+    # TODO: Refactor using a shared context and it_behaves_like
+    context 'when a subservice goes wrong' do
+      let(:exception) { Errors::ApplicationError.new(status: :nok, message: 'oh no') }
+
+      context 'when FindLobby fails' do
+        let(:find_lobby_behaviour) { receive(:call).and_raise exception }
+
+        it 'relays the exception' do
+          expect(service_response).to eql exception
+        end
+      end
+
+      context 'when CreateLobby fails' do
+        let(:create_lobby_behaviour) { receive(:call).and_raise exception }
+
+        it 'relays the exception' do
+          expect(service_response).to eql exception
+        end
+      end
+
+      context 'when AddUserToLobby fails' do
+        let(:add_user_to_lobby_behaviour) { receive(:call).and_raise exception }
+
+        it 'relays the exception' do
+          expect(service_response).to eql exception
+        end
       end
     end
   end
