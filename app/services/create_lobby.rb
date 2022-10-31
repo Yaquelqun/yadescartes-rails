@@ -1,7 +1,9 @@
 class CreateLobby
   def call
-    create_starting_pile
-    lobby
+    ActiveRecord::Base.transaction do
+      create_starting_pile
+      lobby
+    end
   end
 
   private
