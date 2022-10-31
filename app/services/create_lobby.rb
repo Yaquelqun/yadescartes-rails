@@ -11,6 +11,6 @@ class CreateLobby
   end
 
   def create_starting_pile
-    CreateStartingPile.new(lobby).call
+    CreateStartingPile.new(lobby: lobby).call
   end
 end

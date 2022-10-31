@@ -3,10 +3,13 @@
 # said lobby. It's basically the service associated with the
 # "Start Game" button
 class JoinLobby
-  attr_reader :user_id
+  attr_reader :user
 
-  def initialize(user_id:)
-    @user_id = user_id
+  def initialize(user:)
+    @user = user
+    return if @user
+
+    raise Errors::MissingArgument.new(argument: 'user')
   end
 
   def call
@@ -30,9 +33,5 @@ class JoinLobby
 
   def add_user_to(lobby)
     AddUserToLobby.new(user: user, lobby: lobby).call
-  end
-
-  def user
-    @user ||= User.find(user_id)
   end
 end
