@@ -35,9 +35,8 @@ describe JoinLobby do
     end
 
     context 'with a free user' do
-
       context 'when a free lobby exists' do
-        let(:find_lobby_behaviour) { receive(:call).and_return(lobby)}
+        let(:find_lobby_behaviour) { receive(:call).and_return(lobby) }
 
         it 'succeeds' do
           expect { service_response }.not_to raise_error
@@ -50,6 +49,11 @@ describe JoinLobby do
           expect(create_lobby_double).not_to have_received(:call)
         end
 
+        it 'calls the right services' do
+          service_response
+          expect(find_lobby_double).to have_received(:call)
+          expect(add_user_to_lobby_double).to have_received(:call)
+        end
       end
 
       context 'when no free lobby is available' do
