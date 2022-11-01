@@ -4,14 +4,13 @@
 # that matches the user demands
 class FindLobby
   attr_reader :initial_scope
+
   def initialize(initial_scope: Lobby.waiting_for_players)
     @initial_scope = initial_scope
   end
 
   def call
-    scoped = find_oldest(initial_scope)
-
-    scoped
+    find_oldest(initial_scope)
   end
 
   private
