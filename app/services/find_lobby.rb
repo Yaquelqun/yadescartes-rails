@@ -1,30 +1,21 @@
+# FindLobby is the matchmaking service
+# For now, it simply returns an open lobby
+# Later, it will search the open lobbies for one
+# that matches the user demands
 class FindLobby
-  attr_reader :user_id
+  attr_reader :initial_scope
 
-  def initialize(user_id:)
-    @user_id = user_id
+  def initialize(initial_scope: Lobby.waiting_for_players)
+    @initial_scope = initial_scope
   end
 
   def call
-    check_user_availability
-    available_lobby.users << user
-    available_lobby
+    find_oldest(initial_scope)
   end
 
   private
 
-  def check_user_availability
-    return unless user.busy?
-
-    raise Errors::ApplicationError.new(status: :unprocessable_entity, message: 'user_already_in_lobby')
-  end
-
-  def available_lobby
-    @available_lobby ||= Lobby.waiting_for_players.order(created_at: :asc).first || CreateLobby.new.call
-  end
-
-  def user
-    @user ||= User.find(user_id)
+  def find_oldest(scoped)
+    scoped.order(created_at: :asc).first
   end
 end
-

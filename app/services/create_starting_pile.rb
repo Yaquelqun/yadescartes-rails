@@ -1,3 +1,8 @@
+# CreateStartingPile creates the pile for the lobby
+# and calls another service to generate the deck that we'll play with.
+# If initializing a lobby is more complicated later, we could
+# rename this service InitializeLobbyDependencies 
+# and maybe call it from a job
 class CreateStartingPile
   attr_reader :lobby
 
@@ -7,19 +12,10 @@ class CreateStartingPile
 
   def call
     ActiveRecord::Base.transaction do
-      pile = lobby.create_pile
-      generate_cards_for(pile)
+      pile = Pile.create!(lobby: lobby)
+
+      GenerateDeck.new(pile: pile).call
     end
     lobby
-  end
-
-  private
-
-  def generate_cards_for(pile)
-    Card::SUITS.each do |suit|
-      Card::RANKS.each do |rank|
-        pile.cards << Card.create(suit: suit, rank: rank)
-      end
-    end
   end
 end

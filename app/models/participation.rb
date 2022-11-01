@@ -1,3 +1,7 @@
+# TODO: This class is going to be used for 2 purposes: 
+# - Signify the participation of a user in a lobby
+# - Signify that it's the user's turn to play using
+# the active boolean. Maybe those 2 should be separated
 class Participation < ApplicationRecord
   belongs_to :lobby
   belongs_to :user

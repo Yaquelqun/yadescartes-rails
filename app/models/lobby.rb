@@ -16,8 +16,12 @@ class Lobby < ApplicationRecord
   scope :ongoing, -> { where(status: ONGOING) }
   scope :finished, -> { where(status: FINISHED) }
 
-  def check_for_start
-    update(status: ONGOING) if participations.count == MAX_PLAYERS
+  def self.oldest_waiting_for_players
+    waiting_for_players.order(created_at: :asc).first
+  end
+
+  def ready_to_start?
+    status == WAITING_FOR_PLAYERS && participations.count == MAX_PLAYERS
   end
 end
 
