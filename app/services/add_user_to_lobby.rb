@@ -7,16 +7,23 @@ class AddUserToLobby
   def initialize(user:, lobby:)
     @user = user
     @lobby = lobby
+
+    return if @user && @lobby
+
+    raise Errors::MissingArgument.new(argument: [@user, @lobby].detect(&:nil?))
   end
 
   def call
-    lobby.users << user
-    start_lobby if lobby.ready_to_start?
+    ActiveRecord::Base.transaction do
+      Participation.create!(user: user, lobby: lobby)
+      start_lobby if lobby.ready_to_start?
+    end
+    lobby
   end
 
   private
 
   def start_lobby
-    lobby.update(status: Lobby::ONGOING)
+    lobby.update!(status: Lobby::ONGOING)
   end
 end
