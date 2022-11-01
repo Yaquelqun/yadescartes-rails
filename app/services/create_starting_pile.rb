@@ -12,7 +12,7 @@ class CreateStartingPile
 
   def call
     ActiveRecord::Base.transaction do
-      pile = Pile.create(lobby: lobby)
+      pile = Pile.create!(lobby: lobby)
 
       GenerateDeck.new(pile: pile).call
     end
