@@ -13,6 +13,8 @@ gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
+gem 'aasm', '~> 5.4'
+gem 'after_commit_everywhere', '~> 1.0'
 gem 'redis', '~> 4.0'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
